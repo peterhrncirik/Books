@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %} Books | Contact seller {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <nav aria-label="breadcrumb" class="my-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+              <li class="breadcrumb-item" aria-current="page">Messages</li>
+            </ol>
+          </nav>
+
+          
+        {% for msg in messages %}
+        <ul>
+            <li>{{ msg.sender }} send message to {{ msg.receiver }} - message: {{ msg.message }}</li>
+        </ul>
+        {% endfor %}
+
+        <div class="row">
+          <div class="col-4">
+            <div role="tabpanel">
+              <!-- List group -->
+              <div class="list-group" id="myList" role="tablist">
+                {% for msgs in messages %}
+                <a  href="{% url 'user_messages_chat' msgs.sender msgs.receiver.id %}" role="tab">{{ msgs }}</a>
+                {% endfor %}
+              </div>
+            </div>
+            </div>
+
+            <div class="col-8">
+            <!-- Tab panes -->
+            <div class="tab-content">
+              {% for msgs in messages %}
+              <div class="tab-pane active" id="{{ msgs.receiver }}" role="tabpanel">{{ msgs.message }}</div>
+              {% endfor %}
+              <!-- <div class="tab-pane" id="settings" role="tabpanel">...</div> -->
+            </div>
+          </div>
+          </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+

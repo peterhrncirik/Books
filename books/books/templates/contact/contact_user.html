@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %} Books | Contact user {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <nav aria-label="breadcrumb" class="my-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+              <li class="breadcrumb-item" aria-current="page">Contact</li>
+              <li class="breadcrumb-item active" aria-current="page">{{ receiver }}</li>
+            </ol>
+          </nav>
+
+          
+        {% bootstrap_messages %}
+        <h2>Contact seller: {{ receiver }}</h2>
+    
+        <div class="my-5">
+            <p class="font-weight-bold">Your Name: <input type="text" class="form-control" value="{{ user.first_name }} {{ user.last_name }}" disabled></p>
+            <p class="font-weight-bold">Your E-mail: <input type="text" class="form-control" value="{{ user.email }}" disabled></p>
+        </div>
+    
+        <form action="{% url 'contact_user' receiver %}" method="POST" class="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea name="message" class="form-control" id="" cols="30" rows="10" placeholder="Message"></textarea>
+            </div>
+            {% buttons %}
+                <button name="submit" class="btn btn-info" disabled>Send</button>
+                <p class="small">Contact forms are disabled in this example.</p>
+            {% endbuttons %}
+        </form>
+    </div>
+
+{% endblock %}

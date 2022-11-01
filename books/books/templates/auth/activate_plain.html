@@ -1,0 +1,14 @@
+{% autoescape off %}
+
+Hallo {{ user }}!
+
+Vielen Dank für Ihre Registrierung bei Wien Bücher. 
+Um Ihre Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken:
+
+https://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+Bei Fragen schreiben Sie uns eine E-Mail an info@wienbuecher.at
+
+Fröhliches Lesen!
+
+{% endautoescape %}

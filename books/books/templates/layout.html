@@ -1,0 +1,310 @@
+{% load bootstrap4 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+          <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BSXPGPWKJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-7BSXPGPWKJ');
+    </script>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <meta name="description" property="description" content="Find used books.">
+      <meta name="keywords" content="book, sell, used, new, books">
+      {% block meta %}{% endblock %}
+      <title>{% block title %} Books - Find used books {% endblock %}</title>
+      {% bootstrap_css %}
+      {% bootstrap_javascript jquery='full' %}
+      <link href="{% static 'styles.css' %}" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+      <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+      <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    </head>
+    <style>
+
+
+  .spinner-border {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+    position: relative;
+    right: 170%;
+    top: 15%;
+  }
+
+  
+  #resultsTop {
+    position: absolute;
+    z-index: 110;
+    margin-top: 40px;
+    width: 40%;
+    margin-right: 90px;
+    text-align: left
+  }
+
+  #resultsTop p {
+    font-size: 1rem;
+  }
+    </style>
+    <body>
+      <div class="dl d-none"></div>
+        <nav class="navbar navbar-expand-lg d-flex bg-light">
+            <a class="navbar-brand font-weight-bold" href="/"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book mx-2 text-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1 2.828v9.923c.918-.35 2.107-.692 3.287-.81 1.094-.111 2.278-.039 3.213.492V2.687c-.654-.689-1.782-.886-3.112-.752-1.234.124-2.503.523-3.388.893zm7.5-.141v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+            </svg>Books</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-menu" aria-controls="nav-menu" aria-expanded="false" aria-label="Toggle navigation">
+              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-justify font-weight-bold" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="nav-menu">
+              <ul class="navbar-nav w-100">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Books
+                  </a>
+                  <div class="dropdown-menu p-3 mx-auto" aria-labelledby="navbarDropdown">
+                    <a href="{% url 'book_add' %}" class="btn btn-danger btn-sm my-2 d-block mx-auto">Add book
+</a>
+                    <a class="dropdown-item" href="{% url 'books_offers' %}">Offered books</a>
+                    <a class="dropdown-item" href="{% url 'books_requests' %}">Requested books
+
+</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'categories' %}">Categories</a>
+                    <a class="dropdown-item" href="{% url 'books' %}">All books</a>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link font-weight-bold" href="{% url 'how_it_works' %}">How does it work?</a>
+                </li>
+                <li class="nav-item search-link d-lg-none"><a href="{% url 'search' %}" class="nav-link font-weight-bold">Search</a></li>
+                <li class="nav-item mx-auto search {% if request.get_full_path == '/' %} d-none {% endif %}">
+                  <form action="{% url 'search' %}">
+                    <div class="d-flex align-content-center justify-content-center">
+                      <input type="text" name="query" placeholder="Title, Author, Keyword, ISBN"  id="searchBarTop" class="form-control mx-2 w-100" required>
+                      <!-- <div class="text-center d-none" id="loader">
+                        <div class="spinner-border" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div> -->
+                      <button type="submit" class="btn btn-info align-item-center">Search</button>
+                      <div id="resultsTop"></div>
+                    </div>
+                  </form>
+                </li>
+                  {% if user.is_authenticated %}
+                    <li class="nav-item dropdown ml-auto d-none d-md-block">
+                      <a class="nav-link dropdown-toggle font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-square" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                          <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg>
+                      </a>
+                      <div class="dropdown-menu p-2 mx-auto" aria-labelledby="navbarDropdown">
+                        <span class="nav-link font-weight-bold">Welcome back, {{ user }}!</span>
+                        <a href="{% url 'user_account' user %}" class="nav-link">My account</a>
+                        <a class="nav-link" href="{% url 'logout' %}">Log-out</a>
+                    </li>
+                    <li class="nav-item ml-auto d-md-none">
+                      <hr>
+                      <span class="nav-link font-weight-bold">Welcome back, {{ user }}!</span>
+                    </li>
+                    <li class="nav-item d-md-none">
+                      <a href="{% url 'user_account' user %}" class="nav-link">My account</a>
+                    </li>
+                    <li class="nav-item d-md-none">
+                      <a class="nav-link" href="{% url 'logout' %}">Log-out</a>
+                    </li>
+                  {% else %}
+                      <li class="nav-item ml-auto">
+                          <a class="nav-link font-weight-bold" href="{% url 'login' %}">Log-in</a>
+                      </li>
+                      <!-- <li class="nav-item">
+                          <a class="nav-link font-weight-bold" href="{% url 'register' %}">Register</a>
+                      </li> -->
+                  {% endif %}
+                    <a class="btn btn-outline-info mx-lg-3 my-2 my-md-0 font-weight-bold" href="{% url 'book_add' %}">Add new book
+</a>
+              </ul>
+            </div>
+          </nav>
+
+        <div class="main-content">
+          
+            {% block body %}
+            {% endblock %}
+        </div>
+
+        <footer class="footer mt-5 text-center text-white d-flex justify-content-center align-items-center">
+          <div>
+            <p class="d-flex justify-content-center align-items-center">
+              <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-envelope mr-2" fill="#405de6" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"/>
+              </svg><a href="{% url 'contact_us' %}">Kontakt</a>
+              <span class="mx-3">|</span>
+              <a href="" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="#405de6" class="bi bi-instagram mr-2" viewBox="0 0 16 16">
+                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+              </svg></a>
+              <!-- <span class="mx-3">|</span>
+              <a href="https://www.facebook.com/viennabooks" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="#405de6" class="bi bi-facebook mr-2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+              </svg></a> -->
+            </p>
+            <p>&copy; <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-book mx-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1 2.828v9.923c.918-.35 2.107-.692 3.287-.81 1.094-.111 2.278-.039 3.213.492V2.687c-.654-.689-1.782-.886-3.112-.752-1.234.124-2.503.523-3.388.893zm7.5-.141v9.746c.935-.53 2.12-.603 3.213-.493 1.18.12 2.37.461 3.287.811V2.828c-.885-.37-2.154-.769-3.388-.893-1.33-.134-2.458.063-3.112.752zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+            </svg>Books</p>
+          </div>
+        </footer>
+       
+        <script>
+          
+          const d_lights = document.querySelector('.dl');
+          // const loader = document.querySelector('#loader');
+          let timerMain;
+          let searchBarMain;
+          let results;
+
+          function sleeper(ms) {
+            return function(x) {
+              return new Promise(resolve => setTimeout(() => resolve(x), ms));
+            };
+          }
+
+          document.addEventListener('click', () => {
+            d_lights.classList.add('d-none');
+            results.innerHTML = '';
+          });
+
+          document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+              d_lights.classList.add('d-none');
+              results.innerHTML = '';
+            }
+          })
+
+          if (window.location.href === 'https://peterhrncirik.pythonanywhere.com/') {
+            searchBarMain = document.querySelector('#searchBarMain');
+            results = document.querySelector('#results')
+          } else if (window.location.href === 'https://peterhrncirik.pythonanywhere.com/') {
+            searchBarMain = document.querySelector('#searchBarMain');
+            results = document.querySelector('#results')
+          } else {
+            searchBarMain = document.querySelector('#searchBarTop');
+            results = document.querySelector('#resultsTop')
+          }
+          
+          searchBarMain.addEventListener('keyup', e => {
+            
+            if(e.target.value.length > 4) {
+              
+              if(timerMain) clearTimeout(timerMain);
+              
+              timerMain = setTimeout(() => {
+                // loader.classList.remove('d-none');
+
+                fetch(`{% url 'live_search' %}?query=${e.target.value}`)
+                  .then(res => res.json())
+                  .then(books => {
+                    // loader.classList.add('d-none');
+                    results.innerHTML = '';
+           
+                    let maxResults = books;
+                    if (books.length > 6) maxResults = books.slice(0, 5);
+                    else maxResults = books;
+
+                    if (maxResults.hasOwnProperty('e')) {
+                      d_lights.classList.remove('d-none');
+                      const foundBook = document.createElement('div');
+                        foundBook.classList.add('list-group-item');
+                        foundBook.classList.add('list-group-item-action');
+                        foundBook.classList.add('d-flex');
+                        foundBook.classList.add('align-items-center');
+      
+                        foundBook.innerHTML = maxResults.e;
+      
+                        results.appendChild(foundBook);
+                    } else {
+                      
+                      maxResults.forEach(book => {
+                        d_lights.classList.remove('d-none');
+                        document.addEventListener('click', () => {
+                          d_lights.classList.add('d-none');
+                          results.innerHTML = '';
+                        });
+      
+                        const foundBook = document.createElement('button');
+                        foundBook.classList.add('list-group-item');
+                        foundBook.classList.add('list-group-item-action');
+                        foundBook.classList.add('d-flex');
+                        foundBook.classList.add('align-items-center');
+      
+                        foundBook.innerHTML = `
+                        <span>
+                          <img src="https://peterhrncirik.pythonanywhere.com/media/${book.cover}" alt="${book.title}"  class="img-reponsive img-rounded search-result-image" />
+                        </span>
+                        <span class="ml-3 d-flex flex-column">
+                        <h6 class="my-0 font-weight-bold">${book.title}</h6>
+                        <p class="align-self-start">${book.author}</p>
+                        </span>`;
+      
+                        results.appendChild(foundBook);
+
+                        foundBook.addEventListener('click', () => {
+      
+      
+                          window.location.replace(`https://peterhrncirik.pythonanywhere.com/book/${book.id}/${book.slug}/`);
+      
+                      });
+      
+                      });
+                    }
+    
+    
+    
+                  });
+                  
+    
+              }, 1500);
+    
+            } 
+    
+          });
+    
+        </script>   
+    
+    
+    <!-- <script type='application/ld+json'>
+      {
+        "@context": "http://www.schema.org",
+        "@type": "WebPage",
+        "name": "Wien Buecher",
+        "url": "https://www.wienbuecher.at",
+        "description": "Verkaufe oder kaufe gebrauchte und neue Bücher in ganz Wien.",
+        "address": {
+           "@type": "PostalAddress",
+           "addressLocality": "Vienna",
+           "addressCountry": "Austria"
+        }
+      }
+      </script> -->
+    </body>
+</html>

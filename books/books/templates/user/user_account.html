@@ -1,0 +1,180 @@
+{% extends 'layout.html' %}
+{% block title %} Books | Account {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container my-5 main-content">
+
+  <nav aria-label="breadcrumb" class="my-4 pb-2">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item">Account</li>
+      <li class="breadcrumb-item active" aria-current="page">{{ current_user }}</li>
+    </ol>
+  </nav>
+
+{% bootstrap_messages %}
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="d-flex">
+              <h3>
+                {{ current_user.username }} 
+              </h3>
+              {% if not is_actual_user %}
+              <a href="{% url 'contact_user' current_user.username %}" class="btn btn-info mx-3">Contact seller</a>
+              {% endif %}
+              {% if user.is_authenticated and is_actual_user %}
+              <a href="{% url 'user_account_update' user %}" class="btn btn-warning btn-sm m-2">Update</a> 
+              {% endif %}
+            </div>
+          
+            {% if current_user.district %}
+            <p class="font-weight-bold my-2">{{ current_user.district }}</p>
+            {% endif %}
+            <hr>
+            {% if current_user.is_private %}
+            <p>This user's profile is private.</p>
+            {% endif %}
+
+            {% if not user.is_anonymous and is_actual_user and not has_any_contact_info %}
+              <p class="small"><a href="{% url 'user_account_update' user %}">Update information</a></p>
+            {% endif %}
+
+            {% if not current_user.is_private %}
+            {% if current_user.first_name or current_user.last_name%}
+              <p>{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            {% endif %}
+            {% endif %}
+            
+            {% if not current_user.is_private and current_user.mobile %}
+              <p>Mobile: {{ current_user.mobile }}</p>
+            {% endif %}
+            {% if not current_user.is_private and current_user.about_me %}
+              <h5>About me:</h5>
+              <p>{{ current_user.about_me }}</p>
+            {% endif %} 
+        </div>
+        <div class="col-md-4">
+            <h5>Information</h5>
+            {% if not current_user.is_private %}
+            <p>{{ current_user.email }} {% if current_user.is_verified %} <span class="badge badge-success">&#10003; Verified account</span> {% endif %}</p>
+            {% else %}
+            {% if current_user.is_verified %} <span class="badge badge-success my-2">&#10003; Verified account</span>{% endif %}
+            {% endif %}
+            <p>Member since: {{ current_user.date_joined }}</p>
+            <p>Last online: {{ current_user.last_login }}</p>
+        </div>
+        <div class="col-md-4">  
+            <h6 class="font-weight-bold">Ratings:</h6>
+            <div class="user-ratings d-flex justify-content-around align-items-center my-3">
+              <p class="lead">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-emoji-smile" fill="green" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"/>
+                <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                </svg>
+                {{ current_user.rating_good }}x
+              </p>
+
+              
+              <p class="lead">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-emoji-neutral" fill="orange" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path fill-rule="evenodd" d="M4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                  <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                </svg>
+                {{ current_user.rating_medium }}x
+              </p>
+              
+              <p class="lead">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-emoji-frown" fill="red" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path fill-rule="evenodd" d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683z"/>
+                  <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                </svg>
+                {{ current_user.rating_bad }}x
+              </p>
+              
+            </div>
+            <a href="{% url 'user_ratings' current_user %}" class="btn btn-outline-info btn-sm d-block d-md-inline mt-1 mb-4">See all ratings</a> 
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs my-5" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active font-weight-bold" id="book-offers-tab" href="#book-offers" role="tab" aria-controls="book-offers" aria-selected="true">Offered books ({{offers_count}})</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link font-weight-bold" id="book-requests-tab" href="{% url 'user_account_requests' current_user %}" role="tab" aria-controls="book-requests" aria-selected="false">Requested books ({{request_count}})</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active bg-light border rounded p-2" id="book-offers" role="tabpanel" aria-labelledby="book-offers-tab">
+        <div class="row">
+          {% for book in page.object_list %}
+      <div class="col-lg-3 col-md-4 col-sm-5 my-md-3 mx-auto">
+        <div class="card-deck mx-auto">
+          <div class="card mx-auto">
+            <p class="text-center">
+              <small>Requested <span class="font-weight-bold">{{ book.date_added|timesince }}</span> ago</small>
+            </p>
+            <img src="{{ book.book.cover.url }}" class="card-img-top shadow" alt="...">
+            <div class="card-body text-center">
+              <a href="{% url 'book' book.book.id book.book.title|slugify %}">
+                <p class="card-text">{{ book.book.author }}</p>
+                <h5 class="card-title">{{ book.book.title|truncatechars:17 }}</h5>
+              </a>
+            </div>
+            <div class="card-footer text-center">
+              {% if book.price == 0 %}
+              <a href="{% url 'book' book.book.id book.book.title|slugify %}" class="btn btn-success btn-sm">
+                Free
+              </a>
+              {% else %}
+              <a href="{% url 'book' book.book.id book.book.title|slugify %}" class="btn btn-info btn-sm">
+                Buy for {{ book.price }}&euro;
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="p-3">
+        <p class="lead">User is not looking for any books at the moment.</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if page.object_list %}
+    <div class="d-flex justify-content-center">
+  
+      <nav aria-label="...">
+        <ul class="pagination">
+          <li class="page-item {% if not prev_page_url %} disabled {% endif %}">
+            <a class="page-link" href="{{ prev_page_url }}" tabindex="-1" aria-disabled="true">Back</a>
+          </li>
+          {% for n in page.paginator.page_range %}
+            {% if page.number == n %}
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+              </li>
+              {% elif n > page.number|add:-4   and n < page.number|add:4   %}
+              <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+              {% endif %}
+          {% endfor %}
+    
+    
+          <li class="page-item {% if not next_page_url %} disabled {% endif %}">
+            <a class="page-link" href="{{ next_page_url }}">Next</a>
+          </li>
+        </ul>
+      </nav>
+  </div>
+  {% endif %}
+      </div>
+      <div class="tab-pane fade bg-light border rounded p-2" id="book-requests" role="tabpanel" aria-labelledby="book-requests-tab"></div>
+    </div>
+
+{% endblock %}

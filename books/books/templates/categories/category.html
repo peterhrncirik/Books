@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block title %} Books | Books - {{ category }} {% endblock %}
+{% load bootstrap4 %}
+{% block body %}
+
+<div class="container">
+  <nav aria-label="breadcrumb" class="my-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'categories' %}">Categories</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ category }}</li>
+    </ol>
+  </nav>
+
+  {% bootstrap_messages %}
+  
+    <div class="d-flex align-items-center justify-content-center category">
+      <h1>Category: {{ category }}</h1>
+      <p class="align-self-end mx-md-3">({{ total_count }} {% if total_count == 1 %} Book {% else %} Books {% endif %})</p>
+    </div>
+  
+    <div class="row my-5 bg-light rounded p-4">
+      {% for book in page.object_list %}
+    <div class="col-lg-3 col-md-4 col-sm-5 my-2 mx-auto">
+      <div class="card-deck mx-auto">
+        <div class="card mx-auto">
+          <img src="{{ book.cover.url }}" class="card-img-top shadow mt-4" alt="...">
+          <div class="card-body text-center">
+            <a href="{% url 'book' book.id book.title|slugify %}">
+              <p class="card-text">{{ book.author }}</p>
+              <h5 class="card-title">{{ book.title|truncatechars:17 }}</h5>
+            </a>
+          </div>
+          <div class="card-footer text-center">
+            <a href="{% url 'book' book.id book.title|slugify %}" class="btn btn-info btn-sm">
+              Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="p-5">
+      <h5>There are no books in this category. <a href="{% url 'book_add' %}">Add a book
+      </a>.</h5>
+    </div>
+    {% endfor %}
+    </div>
+    
+    <div class="d-flex justify-content-center">
+      <nav aria-label="...">
+        <ul class="pagination">
+          <li class="page-item {% if not prev_page_url %} disabled {% endif %}">
+            <a class="page-link" href="{{ prev_page_url }}" tabindex="-1" aria-disabled="true">Back</a>
+          </li>
+          {% for n in page.paginator.page_range %}
+            {% if page.number == n %}
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+              </li>
+              {% elif n > page.number|add:-4   and n < page.number|add:4   %}
+              <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+              {% endif %}
+          {% endfor %}
+    
+    
+          <li class="page-item {% if not next_page_url %} disabled {% endif %}">
+            <a class="page-link" href="{{ next_page_url }}">Next</a>
+          </li>
+        </ul>
+      </nav> 
+    </div> 
+</div>
+
+
+{% endblock %}

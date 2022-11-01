@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %} Books | Rate seller {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+    <div class="container">
+
+        <nav aria-label="breadcrumb" class="my-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepages</a></li>
+              <li class="breadcrumb-item active" aria-current="page">User</li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'user_account' username %}">{{ username }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Book</li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'book' book.id book.title %}">{{ book.title }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Rate</li>
+            </ol>
+          </nav>
+
+        {% bootstrap_messages %}
+        <h2>Rate seller</h2>
+        <hr>
+        <div class="my-4">
+            <h4>Seller: {{ username }}</h4>
+            <h4>Book: {{ book.title }}</h4>
+        </div>
+        <p>Select how satisfied are you. You can also leave a comment if you wish.</p>
+        <hr>
+        <form action="{% url 'user_rate' username book.id %}" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form layout='inline' %}
+            {% buttons %}
+                <button name="submit" class="btn btn-info">Rate seller</button>
+            {% endbuttons %}
+
+        </form>
+        
+    </div>
+
+{% endblock %}

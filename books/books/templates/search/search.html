@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %} Books | <i class="fas fa-search-location    "></i> {% endblock %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container my-5">
+
+    <nav aria-label="breadcrumb" class="my-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+          <li class="breadcrumb-item">Search</li>
+        </ol>
+      </nav>
+    <h2>What are you looking for?</h2>
+    <div class="my-5">
+      <form action="{% url 'search' %}">
+        <div class="d-flex align-content-center justify-content-center">
+          <input type="search" name="query" placeholder="Title, author, keyword, ISBN" id="" class="form-control mx-2 w-100" required>
+          <button type="submit" class="btn btn-info align-item-center">Search</button>
+        </div>
+      </form>
+    </div>
+</div>
+
+{% endblock %}

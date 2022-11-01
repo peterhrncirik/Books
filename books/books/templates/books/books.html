@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block title %} Books | All books {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_messages %}
+
+<div class="container main-content">
+
+  <nav aria-label="breadcrumb" class="my-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Books</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex align-items-center justify-content-center books">
+    <h1>All Books</h1>
+    <p class="lead ml-md-2 align-self-end">({{ books_total_count }} Books)</p>
+  </div>
+
+  <!-- <div class="bg-light border rounded py-3">
+    <h1>TO DO</h1>
+    <div class="row">
+      <div class="col-4">
+        <form action="">
+          {{ filter.form.as_p }}
+          <input type="submit" value="Filter">
+        </form>
+      </div>
+      <div class="col-8 text-right">
+        <div class="dropdown mr-4">
+          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sortiren nach
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Newest</a>
+            <a class="dropdown-item" href="#">Price (lowest)</a>
+            <a class="dropdown-item" href="#">Price (highest)</a>
+            <a class="dropdown-item" href="#">Title (A-Z)</a>
+            <a class="dropdown-item" href="#">Title (Z-A)</a>
+            <a class="dropdown-item" href="#">Year released</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="row my-5 bg-light rounded p-4">
+    {% for book in page.object_list %}
+    <div class="col-lg-3 col-md-4 col-sm-5 my-2 mx-auto">
+      <div class="card-deck mx-auto">
+        <div class="card mx-auto">
+          <img src="{{ book.cover.url }}" class="card-img-top shadow mt-4" alt="...">
+          <div class="card-body text-center">
+            <a href="{% url 'book' book.id book.title|slugify %}">
+              <p class="card-text">{{ book.author }}</p>
+              <h5 class="card-title">{{ book.title|truncatechars:17 }}</h5>
+            </a>
+          </div>
+          <div class="card-footer text-center">
+            <a href="{% url 'book' book.id book.title|slugify %}" class="btn btn-info btn-sm">
+              Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if page.object_list %}
+  <div class="d-flex justify-content-center">
+
+    <nav aria-label="...">
+      <ul class="pagination">
+        <li class="page-item {% if not prev_page_url %} disabled d-none {% endif %}">
+          <a class="page-link" href="{{ prev_page_url }}" tabindex="-1" aria-disabled="true">Back</a>
+        </li>
+        <li class="page-item {% if page.number < 5 %} disabled d-none {% endif %}">
+          <a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">First</a>
+        </li>
+        
+        {% for n in page.paginator.page_range %}
+          {% if page.number == n %}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="?page={{ n }}">{{ n }} <span class="sr-only">(current)</span></a>
+            </li>
+            {% elif n > page.number|add:-4   and n < page.number|add:4   %}
+            <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+            {% endif %}
+        {% endfor %}
+  
+        <li class="page-item {% if not next_page_url %} disabled {% endif %}""><a class="page-link" href="?page={{ page.paginator.num_pages }}">Last</a></li>   
+        <li class="page-item {% if not next_page_url %} disabled {% endif %}">
+          <a class="page-link" href="{{ next_page_url }}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+
+
+{% endblock %}

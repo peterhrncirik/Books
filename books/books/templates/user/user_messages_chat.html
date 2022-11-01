@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %} Books | Contact seller {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <nav aria-label="breadcrumb" class="my-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+              <li class="breadcrumb-item" aria-current="page">Messages</li>
+            </ol>
+          </nav>
+
+          
+          <ul class="list-group">
+            <li class="list-group-item">{{ messages }}</li>
+            <!-- {% for msgs in messages %}
+            <li class="list-group-item">{{ msgs }}</li>
+            {% empty %}
+            <li class="list-group-item">No messages here.</li>
+            {% endfor %} -->
+          </ul>
+       
+
+    </div>
+
+{% endblock %}
+

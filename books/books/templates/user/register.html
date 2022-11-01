@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %} Books | Sign up {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+  <nav aria-label="breadcrumb" class="my-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sign up</li>
+    </ol>
+  </nav>
+  {% bootstrap_messages %}  
+  <h2>Welcome to Books</h2>
+      <form action="" method="POST" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form  %}
+      {% buttons %}
+        <button type="submit" name="submit" class="btn btn-info">Register</button>
+      {% endbuttons %}
+      </form>
+      <p>Or <span class="font-weight-bold"><a href="{% url 'login' %}">Login</a>.</span>.</p>
+</div>
+
+{% endblock %}

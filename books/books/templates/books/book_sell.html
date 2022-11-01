@@ -1,0 +1,189 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %} Books | List new book {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+
+    <nav aria-label="breadcrumb" class="my-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+          <li class="breadcrumb-item active" aria-current="page">List new book
+</li>
+        </ol>
+      </nav>
+
+      {% bootstrap_messages %}
+    
+      <h2 class="text-center"> List new book
+ </h2>
+      <div class="my-3 border border-warning rounded p-3">
+        <h4>Are you looking for a book or are you selling?</h4>
+        <div class="d-flex flex-column">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input my-1" id="book_selling" name="book_selling" value="I want to sell">
+            <label for="book_selling" class="custom-control-label">I want to sell.</label>
+            <!-- <p class="small">If you are not selling, you are requesting a book so we can notify you if someone offers the book.</p> -->
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input my-1" id="book_searching" name="book_searching" value="I am looking for a book">
+            <label for="book_searching" class="custom-control-label">I am looking for a book.</label>
+            <hr>
+            <!-- <p class="small">If you are not selling, you are requesting a book so we can notify you if someone offers the book.</p> -->
+          </div>
+        </div>
+      </div>
+      <div class="py-3 bg-light border rounded my-4">
+        <div class="form-group p-3">
+            <!-- <label for="lookup">Start typing the name of the book, if it's newer book, we will insert information automatically. If the book is older, you have to insert information yourself.</label> -->
+            <input type="text" placeholder="What's the name of the book?" name="param" id="lookup" class="form-control" style="height: 60px; font-weight: bold;">
+            <div class="list-group" id="results_add"></div>
+          <div class="d-none align-items-center" id='loader'>
+            <div id="spinner"></div>
+            <p class="mt-4 ml-2">Searching books...:)</p>
+          </div>
+        </div>
+      </div>
+        <div class="row mt-2">
+            <div class="col-md-12">
+                <form action="{% url 'book_add' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <hr>
+                <div class="d-none" id="selling">
+                  <label for="price">Price:</label>
+                  <input type="number" name="price" placeholder="Price" id="price" class="form-control">
+                  <!-- <p class="small">If you wish to giveaway the book, insert 0.</p> -->
+                  <label for="condition" class="mt-2">Condition:</label>
+                  <select class="form-control" name="condition" aria-label="condition" id="condition">
+                    <option value="Used" selected>Used</option>
+                    <option value="New">New</option>
+                    <option value="Old">Old</option>
+                  </select>
+                  <div class="form-group mt-4">
+                    <p>Would you like to add <span style="text-decoration: underline; font-weight: bold; color: #33b5e5;" id="moreinfo">more information?</span></p>
+                    <textarea name="add_info" id="additional_info" cols="30" rows="10" class="form-control d-none" placeholder="More information?"></textarea>
+                  </div>
+                </div>
+                {% buttons %}
+                    <button type="submit" name="submit" class="btn btn-info btn-lg">Submit</button>
+                {% endbuttons %}
+                <input type="hidden" name="cover_img" id="cover_img">
+                <input type="hidden" name="pages" id="pages">
+                <input type="hidden" name="date_published" id="date_published">
+                <input type="hidden" name="description" id="description">
+                <input type="hidden" name="identifier" id="identifier">
+                <input type="hidden" name="is_selling" id="is_selling">
+                </form>
+            </div>
+        </div>
+</div>
+
+<script>
+
+    let timeout;
+    const lookup = document.querySelector('#lookup');
+    const results_add = document.querySelector('#results_add');
+    const title = document.querySelector('#id_title');
+    const author = document.querySelector('#id_author');
+    const language = document.querySelector('#id_language');
+    const isbn = document.querySelector('#id_ISBN');
+    const cover_img = document.querySelector('#cover_img');
+    const pages = document.querySelector('#pages');
+    const date_published = document.querySelector('#date_published');
+    const description = document.querySelector('#description');
+    const identifier = document.querySelector('#identifier');
+    const addInfo = document.querySelector('#moreinfo');
+    const loader = document.querySelector('#loader');
+    const sellingInfo = document.querySelector('#selling');
+    const is_selling_checkbox = document.querySelector('#book_selling');
+    const priceTag = document.querySelector('#price');
+
+    addInfo.addEventListener('click', () => document.querySelector('#additional_info').classList.toggle('d-none'));
+
+    is_selling_checkbox.addEventListener('change', () => {
+
+      if (is_selling_checkbox.checked) {
+        sellingInfo.classList.remove('d-none')
+        document.querySelector('#is_selling').value = true;
+        priceTag.required = true;
+      } else {
+        sellingInfo.classList.add('d-none')
+        document.querySelector('#is_selling').value = false;
+        priceTag.required = false;
+      }
+
+    });
+
+    lookup.addEventListener('keyup', e => {
+    
+    if (e.target.value.length > 4){
+      if(timeout) clearTimeout(timeout);
+      
+      timeout = setTimeout(() => {
+        loader.classList.add('d-flex');
+     
+        fetch(`{% url 'find_book' %}?param=${e.target.value}` )
+          .then(res => res.json())
+          .then(books => {
+            loader.classList.remove('d-flex');
+            results_add.innerHTML = '';
+            
+            if (books.items) {
+                books.items.forEach(book => {
+                
+                const foundBook = document.createElement('button');
+                foundBook.classList.add('list-group-item');
+                foundBook.classList.add('list-group-item-action');
+                foundBook.classList.add('d-flex');
+                foundBook.classList.add('align-items-center');
+
+                if (!book.volumeInfo.imageLinks) coverImg = 'https://wienbuecher.at/media/no_img.gif';
+                else coverImg = book.volumeInfo.imageLinks.smallThumbnail;
+
+                foundBook.innerHTML = `
+                <span>
+                  <img src="${coverImg}" alt="${book.volumeInfo.title}"  class="img-reponsive img-rounded"  style="width: 60px; height: 90px"/>
+                </span>
+                <span class="ml-3">
+                <h6 class="my-0">${book.volumeInfo.title}</h6>
+                <p>${book.volumeInfo.authors ? book.volumeInfo.authors : ''}</p>
+                </span>`;
+
+                results_add.appendChild(foundBook);
+
+                foundBook.addEventListener('click', () => {
+
+
+                    fetch(`{% url 'find_book' %}?bid=${book.id}`)
+                    .then(res => res.json())
+                    .then(res => res.found ? window.location.replace(`https://wienbuecher.at/buch/${res.id}/${res.title}/`) : '');
+
+                    lookup.value = '';
+                    results_add.innerHTML = '';
+                    title.value = book.volumeInfo.title;
+                    if (book.volumeInfo.authors) author.value = book.volumeInfo.authors;
+                    book.volumeInfo.industryIdentifiers.forEach(identifier => {
+                      if (identifier.type === "ISBN_13") isbn.value = identifier.identifier;
+                    })
+                    cover_img.value = book.volumeInfo.imageLinks.smallThumbnail;
+                    identifier.value = book.id;
+                    if (book.volumeInfo.pageCount) pages.value = book.volumeInfo.pageCount;
+                    if (book.volumeInfo.publishedDate) date_published.value = book.volumeInfo.publishedDate;
+                    if (book.volumeInfo.description) description.value = book.volumeInfo.description;
+                    if (book.volumeInfo.language === "en") language.value = "Englisch";
+                    else if (book.volumeInfo.language === "de") language.value = "Deutsch";
+
+                }); 
+              
+        })
+      }
+
+          })}, 1000);
+    }
+
+  });
+</script>
+{% endblock %}

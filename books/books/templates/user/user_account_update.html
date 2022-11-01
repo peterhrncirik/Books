@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block title %} Books | Account {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container main-content">
+
+  <nav aria-label="breadcrumb" class="my-4 pb-2">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item">User</li>
+      <li class="breadcrumb-item">Update</li>
+      <li class="breadcrumb-item active" aria-current="page">Account</li>
+    </ol>
+  </nav>
+
+  {% bootstrap_messages %}
+  
+  <div class="row">
+      <div class="col-md-12 text-center">
+          <h2>Update account</h2>
+      </div>
+      <div class="col-md-12">
+          <form action="{% url 'user_account_update' user %}" method="POST">
+              {% csrf_token %}
+              {% bootstrap_form form %}
+              <p class="small">Going private hides your email, name and phone.</p>
+              {% buttons %}
+                <button name="submit" class="btn btn-info">Update account</button>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+              {% endbuttons %}
+            </form>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %} Books | Add new book {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    
+      <h1 class="text-center"> Sell book </h1>
+      <p>{{ form.errors }}</p>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'book_update' book_id book_title|slugify %}" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" name="submit" class="btn btn-primary">Update information</button>
+                {% endbuttons %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                </form>
+            </div>
+        </div>
+</div>
+{% endblock %}

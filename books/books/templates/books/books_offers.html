@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block title %} Books | Books offers {% endblock %}
+{% load bootstrap4 %}
+{% load books_extras %}
+{% block body %}
+
+{% bootstrap_messages %}
+
+<div class="container main-content">
+
+  <nav aria-label="breadcrumb" class="my-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="{% url 'books' %}">Books</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Books offers</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex align-items-center justify-content-center books">
+    <h1>Books offers</h1>
+    <p class="lead ml-md-2 align-self-end">({{ books_total_count }} Books)</p>
+  </div>
+
+  <div class="bg-light border rounded py-3 mt-4">
+    <div class="row p-2">
+      <div class="col-12 col-md-4 my-2 my-md-0">
+        <div class="dropdown">
+          <form action="{% url 'books_offers' %}" class="" id="district_filter_form">
+              {{ filter.form.district }}
+            </div>
+          </div>
+          <div class="d-none d-md-block col-md-5 col-lg-6"></div>
+          <div class="col-12 col-md-3 col-lg-2">
+            <select name="order" id="id_order" class="form-control">
+            {% for field in filter.form.order %}
+            {{ field }}
+            {% endfor %}
+          </select>
+          </div>
+        </form>
+    </div>
+  </div>
+
+  <div class="row my-5 bg-light rounded p-4 border">
+    {% for book in page.object_list %}
+    <div class="col-lg-3 col-md-4 col-sm-5 my-2 mx-auto">
+      <div class="card-deck mx-auto">
+        <div class="card mx-auto">
+          <p class="text-center my-1">
+            <small>Added <span class="font-weight-bold">{{ book.date_added|timesince }}</span> ago</small>
+          </p>
+          <img src="{{ book.book.cover.url }}" class="card-img-top shadow" alt="{{ book.book.title }}">
+          <div class="card-body text-center">
+            <a href="{% url 'book' book.book.id book.book.title|slugify %}">
+              <p class="card-text">{{ book.book.author }}</p>
+              <h5 class="card-title">{{ book.book.title|truncatechars:17 }}</h5>
+            </a>
+          </div>
+          <div class="card-footer text-center">
+            {% if book.price == 0 %}
+            <a href="{% url 'book' book.book.id book.book.title|slugify %}" class="btn btn-success btn-sm">
+              Free
+            </a>
+            {% else %}
+            <a href="{% url 'book' book.book.id book.book.title|slugify %}" class="btn btn-info btn-sm">
+              Buy for {{ book.price }}&euro; 
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>No one offers book in this district at the moment.</p>
+    {% endfor %}
+  </div>
+  {% if page.object_list %}
+  <div class="d-flex justify-content-center">
+
+    <nav aria-label="...">
+      <ul class="pagination">
+        {% if page.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="{% my_url page.previous_page_number 'page' request.GET.urlencode %}" tabindex="-1" aria-disabled="true">Back</a>
+        </li>
+        {% endif %}
+
+        {% for n in page.paginator.page_range %}
+          {% if page.number == n %}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" >{{ n }} <span class="sr-only">(current)</span></a>
+            </li>
+            {% elif n > page.number|add:-4 and n < page.number|add:4   %}
+            <li class="page-item"><a class="page-link" href="{% my_url n 'page' request.GET.urlencode %}">{{ n }}</a></li>
+            {% endif %}
+        {% endfor %}
+  
+        {% if page.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{% my_url page.next_page_number 'page' request.GET.urlencode %}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+
+  <script>
+    document.querySelector('#id_district').addEventListener('change', () => document.querySelector('#district_filter_form').submit());
+    document.querySelector('#id_order').addEventListener('change', () => document.querySelector('#district_filter_form').submit());
+  </script>
+
+{% endblock %}

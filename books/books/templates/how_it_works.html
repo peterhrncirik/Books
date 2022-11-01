@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %} Books | How does it work? {% endblock %}
+{% block body %}
+<div class="container text-center main-content">
+    <nav aria-label="breadcrumb" class="my-4 pb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+          <li class="breadcrumb-item active" aria-current="page">How does it work?</li>
+        </ol>
+      </nav>
+
+    <div class="how-it-works">
+        <h1>How does it work?</h1>
+        <p class="lead font-weight-bold">..it's very simple & free :)</p>
+        <p class="lead font-weight-bold">We help share books you live and perhaps save one or two <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" class="bi bi-tree" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 0a.5.5 0 0 1 .416.223l3 4.5A.5.5 0 0 1 11 5.5h-.098l2.022 3.235a.5.5 0 0 1-.424.765h-.191l1.638 3.276a.5.5 0 0 1-.447.724h-11a.5.5 0 0 1-.447-.724L3.69 9.5H3.5a.5.5 0 0 1-.424-.765L5.098 5.5H5a.5.5 0 0 1-.416-.777l3-4.5A.5.5 0 0 1 8 0zM5.934 4.5H6a.5.5 0 0 1 .424.765L4.402 8.5H4.5a.5.5 0 0 1 .447.724L3.31 12.5h9.382l-1.638-3.276A.5.5 0 0 1 11.5 8.5h.098L9.576 5.265A.5.5 0 0 1 10 4.5h.066L8 1.401 5.934 4.5z"/>
+          <path d="M7 13.5h2V16H7v-2.5z"/>
+        </svg> trees along the way!</p>
+        <hr>
+    </div>
+
+    <div class="row my-5 d-flex how-it-works-sections">
+      <div class="col-12 d-flex justify-content-center align-items-center my-4 my-md-3">
+        <object data="../static/img/study.svg" type="" style="width: 80px; height: 80px;"></object>
+        <h4 class="mx-3">1. I love to read!</h4>
+      </div>
+
+    <div class="col-12 d-flex justify-content-center align-items-center my-4 my-md-3">
+      <h4 class="mx-3">2. Create <a href="{% url 'register' %}" style="text-decoration: underline;">new account</a>.</h4>
+      <object data="../static/img/user.svg" type="" style="width: 80px; height: 80px;"></object>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center align-items-center my-4 my-md-3">
+      <object data="../static/img/reuse.svg" type="" style="width: 80px; height: 80px;"></object>
+      <h4 class="mx-3">3. <a href="{% url 'book_add' %}" style="text-decoration: underline;">Visit this page,</a> to list new book.</h4>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center align-items-center my-4 my-md-3">
+      <h4 class="mx-3">4. Contact other seller via contact form.</h4>
+      <object data="../static/img/message.svg" type="" style="width: 80px; height: 80px;"></object>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center align-items-center my-4 my-md-3">
+      <object data="../static/img/happy.svg" type="" style="width: 80px; height: 80px;"></object>
+      <h4 class="mx-3">5. Enjoy new (old) book!</h4>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %} Books | Contact seller {% endblock %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+    <div class="container my-5">
+        <nav aria-label="breadcrumb" class="my-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Homepage</a></li>
+              <li class="breadcrumb-item" aria-current="page">Contact seller</li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'user_account' receiver %}">{{ receiver }}</a></li>
+            </ol>
+          </nav>
+
+          
+        {% bootstrap_messages %}
+        <h3>Contact seller: <a href="{% url 'user_account' receiver %}">{{ receiver }}</a></h3>
+        <h5 class="mt-2">Book: {{ book.title }}</h5>
+        <p>Condition: {{ condition }}</p>
+        {% if additional_info %}
+        <p>Additional information: {{ additional_info }}</p>
+        {% endif %}
+        <hr>
+    
+        <!-- <div class="my-2">
+            <p class="font-weight-bold">Ihr Name: <input type="text" class="form-control" value="{{ user.first_name }} {{ user.last_name }}" disabled></p>
+            <p class="font-weight-bold">Ihre E-mail: <input type="text" class="form-control" value="{{ user.email }}" disabled></p>
+        </div>
+     -->
+        <form action="{% url 'contact_user' receiver %}" method="POST" class="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea name="message" class="form-control" id="" cols="30" rows="10" placeholder="Message">
+                </textarea>
+            </div>
+            {% buttons %}
+                <button name="submit" class="btn btn-info" disabled>Send</button>
+                <p class="small">Contact forms are disabled in this example.</p>
+            {% endbuttons %}
+        </form>
+    </div>
+
+{% endblock %}

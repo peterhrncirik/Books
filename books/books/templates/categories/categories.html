@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %} Books | Books - Categories {% endblock %}
+{% load bootstrap4 %}
+{% block body %}
+
+<div class="container">
+
+  <nav aria-label="breadcrumb" class="my-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Hoempage</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Categories</li>
+    </ol>
+  </nav>
+
+  {% bootstrap_messages %}
+  
+    <div class="d-flex align-items-center justify-content-center my-3 categories">
+      <h1>Categories</h1>
+    </div>
+  
+      <div class="list-group">
+        {% for category in categories %}
+        <a href="{% url 'category' category|slugify %}" class="list-group-item list-group-item-action">{{ category }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+
+{% endblock %}
