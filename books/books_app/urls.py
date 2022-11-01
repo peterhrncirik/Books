@@ -27,7 +27,7 @@ info_dict = {
 
 urlpatterns = [
     path('', include('books.urls')),
-    path('manage/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('sitemap.xml', sitemap, {'sitemaps': {'books': GenericSitemap(info_dict, priority=0.9, changefreq="weekly")}},
         name='django.contrib.sitemaps.views.sitemap'),
