@@ -9,13 +9,14 @@ Try the app with test user:
 
 ### Built with
 
-| Rank | Language      |
+| Rank | Name      |
 |-----:|---------------|
 |     1|Python         |
 |     2|Django         |
 |     3|JavaScript     |
 |     4|HTML/CSS       |
-|     5|Google Books API|
+|     5|Bootstrap 4    |
+|     6|Google Books API|
 
 ### Features
 - Full user management
