@@ -1,10 +1,6 @@
 
 import random
 
-"""
- Script to populate DB with some dummy data - USERS or BOOK OFFERS
-"""
-
 def generate_users():
 
     DISTRICTS = (
@@ -36,7 +32,7 @@ def generate_users():
     from faker import Faker
     from .models import User
     fake = Faker()
-    for _ in range(10):
+    for _ in range(150):
         user = User.objects.create_user(username=fake.user_name(),password='password',email=fake.email(),first_name=fake.first_name(), last_name=fake.last_name(), district=random.choice(DISTRICTS))
         user.save()
         print(user)
@@ -106,9 +102,9 @@ def generate_books():
     from faker import Faker
     from .models import User, Book
     fake = Faker()
-    for _ in range(10):
+    for _ in range(700):
         book = Book.objects.create(
-            user_id = random.randint(1,19),
+            user_id = random.randint(1,355),
             title=fake.company(),
             author = fake.name(),
             price = random.randint(1,200),
@@ -119,26 +115,14 @@ def generate_books():
         book.save()
         print(book)
 
-def generate_requests():
-    from faker import Faker
-    from .models import User, Book, BookSellers, Watchlist
-    fake = Faker()
-    for _ in range(100):
-        req = Watchlist.objects.create(
-            user_id = random.randint(1, 11),
-            book_id = random.randint(5, 20)
-        )
-        req.save()
-        print(req)
-
 def generate_offers():
     from faker import Faker
     from .models import User, Book, BookSellers
     fake = Faker()
     for _ in range(100):
         offer = BookSellers.objects.create(
-            user_id = random.randint(1,11),
-            book_id = random.randint(5,20),
+            user_id = random.randint(163,284),
+            book_id = random.randint(13,24),
             price = random.randint(0,100)
         )
         offer.save()

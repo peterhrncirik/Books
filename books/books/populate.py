@@ -3,10 +3,6 @@ import urllib
 import csv
 import time
 
-"""
- Script to populate DB with some Books
-"""
-
 NEW_CATEGORIES = (
     ('art', 'Art'),
     ('antiques-collectibles', 'Antiques & Collectibles'),
@@ -62,14 +58,14 @@ NEW_CATEGORIES = (
 
 from .models import Book
 
-def populate():
-    with open("isbn10_full.csv") as file:
+def populateMe():
+    with open('/home/peterhrncirik/mysite/books/isbn10_full.csv') as file:
         reader = csv.reader(file)
-        id = 3
+        id = 4638
         for isbn in reader:
             
             print('sleeping 40 for the first time...')
-            time.sleep(10)
+            time.sleep(30)
             try:
                 # url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn[0]}&fields=items(id,volumeInfo/authors,volumeInfo/imageLinks/smallThumbnail,volumeInfo/categories,volumeInfo/title,volumeInfo/language,volumeInfo/pageCount,volumeInfo/publishedDate,volumeInfo/subtitle,volumeInfo/industryIdentifiers,volumeInfo/description)&key=AIzaSyDjrM5K4xzt7p601ROtsFAY7ZftORmBnsQ'
                 # url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn[0]}&fields=items(id,volumeInfo/description,volumeInfo/authors,volumeInfo/imageLinks/smallThumbnail,volumeInfo/categories,volumeInfo/title,volumeInfo/language,volumeInfo/pageCount,volumeInfo/publishedDate,volumeInfo/subtitle,volumeInfo/industryIdentifiers)&key=AIzaSyBmYVEppv1Lseiu0wt7YGr-VbXoMraULiw'
@@ -78,7 +74,7 @@ def populate():
                 print(f'STATUS 1st: {status}')
                 if status.json() == {}:
                     print('sleeping 40 for the second time...')
-                    time.sleep(10)
+                    time.sleep(30)
                     print('yes its empty, using another url')
                     # url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:0{isbn[0]}&fields=items(id,volumeInfo/description,volumeInfo/authors,volumeInfo/imageLinks/smallThumbnail,volumeInfo/categories,volumeInfo/title,volumeInfo/language,volumeInfo/pageCount,volumeInfo/publishedDate,volumeInfo/subtitle,volumeInfo/industryIdentifiers)&key=AIzaSyDjrM5K4xzt7p601ROtsFAY7ZftORmBnsQ'
                     # url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:0{isbn[0]}&fields=items(id,volumeInfo/description,volumeInfo/authors,volumeInfo/imageLinks/smallThumbnail,volumeInfo/categories,volumeInfo/title,volumeInfo/language,volumeInfo/pageCount,volumeInfo/publishedDate,volumeInfo/subtitle,volumeInfo/industryIdentifiers)&key=AIzaSyCnGQNvQvolKrmpyJ90Lr2cQ3cXfj-OBLU'
@@ -158,7 +154,7 @@ def populate():
                     # print(id, title, author, ISBN, language, pages, date_published, category, description, identifier, cover)
                     id += 1
                     if imgURL:
-                        with open(f'/books/media/{id}.jpg', 'wb') as coverIMG:
+                        with open(f'/opt/bitnami/projects/books_app/media/{id}.jpg', 'wb') as coverIMG:
                                 coverIMG.write(urllib.request.urlopen(imgURL).read())
                                 cover = f'{id}.jpg'
 
