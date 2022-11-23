@@ -3,6 +3,10 @@ import urllib
 import csv
 import time
 
+"""
+    Script to populate DB with Books from Google Books API 
+"""
+
 NEW_CATEGORIES = (
     ('art', 'Art'),
     ('antiques-collectibles', 'Antiques & Collectibles'),
@@ -59,7 +63,7 @@ NEW_CATEGORIES = (
 from .models import Book
 
 def populateMe():
-    with open('/home/peterhrncirik/mysite/books/isbn10_full.csv') as file:
+    with open('./isbn10_full.csv') as file:
         reader = csv.reader(file)
         id = 4638
         for isbn in reader:
@@ -154,7 +158,7 @@ def populateMe():
                     # print(id, title, author, ISBN, language, pages, date_published, category, description, identifier, cover)
                     id += 1
                     if imgURL:
-                        with open(f'/opt/bitnami/projects/books_app/media/{id}.jpg', 'wb') as coverIMG:
+                        with open(f'/media/{id}.jpg', 'wb') as coverIMG:
                                 coverIMG.write(urllib.request.urlopen(imgURL).read())
                                 cover = f'{id}.jpg'
 

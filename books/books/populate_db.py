@@ -1,5 +1,8 @@
-
 import random
+
+"""
+    Script to populate DB with dummy data
+"""
 
 def generate_users():
 
